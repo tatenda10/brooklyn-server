@@ -366,8 +366,8 @@ class StudentFinancialRecordController {
             );
 
             // Get student transactions (DEBIT transactions) - exclude those that are already covered by enrollments
-            let debitTransactionsWhere = 'WHERE st.student_reg_number = ? AND st.transaction_type = "DEBIT"';
-            let debitTransactionsParams = [student_reg_number];
+            let debitTransactionsWhere = 'WHERE st.student_reg_number = ? AND st.transaction_type = ?';
+            let debitTransactionsParams = [student_reg_number, 'DEBIT'];
 
             if (start_date) {
                 debitTransactionsWhere += ' AND DATE(st.transaction_date) >= ?';
@@ -409,8 +409,8 @@ class StudentFinancialRecordController {
             );
 
             // Get student transactions (CREDIT transactions) - includes transport payments and other payments
-            let creditTransactionsWhere = 'WHERE st.student_reg_number = ? AND st.transaction_type = "CREDIT"';
-            let creditTransactionsParams = [student_reg_number];
+            let creditTransactionsWhere = 'WHERE st.student_reg_number = ? AND st.transaction_type = ?';
+            let creditTransactionsParams = [student_reg_number, 'CREDIT'];
 
             if (start_date) {
                 creditTransactionsWhere += ' AND DATE(st.transaction_date) >= ?';

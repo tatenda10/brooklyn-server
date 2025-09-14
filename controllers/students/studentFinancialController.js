@@ -166,16 +166,16 @@ class StudentFinancialController {
 
       // Get total CREDIT transactions (payments made)
       const [creditTransactionsResult] = await connection.execute(
-        'SELECT COALESCE(SUM(amount), 0) as total_credit FROM student_transactions WHERE student_reg_number = ? AND transaction_type = "CREDIT"',
-        [regNumber]
+        'SELECT COALESCE(SUM(amount), 0) as total_credit FROM student_transactions WHERE student_reg_number = ? AND transaction_type = ?',
+        [regNumber, 'CREDIT']
       );
       
       const totalCredit = creditTransactionsResult[0].total_credit;
 
       // Get total DEBIT transactions (charges/invoices)
       const [debitTransactionsResult] = await connection.execute(
-        'SELECT COALESCE(SUM(amount), 0) as total_debit FROM student_transactions WHERE student_reg_number = ? AND transaction_type = "DEBIT"',
-        [regNumber]
+        'SELECT COALESCE(SUM(amount), 0) as total_debit FROM student_transactions WHERE student_reg_number = ? AND transaction_type = ?',
+        [regNumber, 'DEBIT']
       );
       
       const totalDebit = debitTransactionsResult[0].total_debit;

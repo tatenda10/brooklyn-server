@@ -89,10 +89,7 @@ CREATE TABLE IF NOT EXISTS sports_participants (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   
-  FOREIGN KEY (team_id) REFERENCES sports_teams(id) ON DELETE CASCADE,
-  FOREIGN KEY (student_id) REFERENCES students(RegNumber) ON DELETE CASCADE,
-  FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE,
-  
+ 
   INDEX idx_sports_participants_team (team_id),
   INDEX idx_sports_participants_student (student_id),
   INDEX idx_sports_participants_employee (employee_id),
@@ -144,8 +141,3 @@ INSERT INTO sports_categories (name, description, icon) VALUES
 ('Netball', 'Netball games and tournaments', 'fa-basketball-ball'),
 ('Hockey', 'Hockey matches and competitions', 'fa-hockey-puck');
 
--- Create additional indexes for better performance
-CREATE INDEX idx_sports_fixtures_date_time ON sports_fixtures(fixture_date, fixture_time);
-CREATE INDEX idx_sports_fixtures_home_away ON sports_fixtures(home_team_id, away_team_id);
-CREATE INDEX idx_sports_announcements_priority ON sports_announcements(priority);
-CREATE INDEX idx_sports_participants_role ON sports_participants(role);
