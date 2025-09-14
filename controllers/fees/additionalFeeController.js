@@ -366,7 +366,8 @@ class AdditionalFeeController {
 
       // Get all active students
       const [students] = await conn.execute(
-        'SELECT RegNumber FROM students WHERE Active = "Yes"'
+        'SELECT RegNumber FROM students WHERE Active = ?',
+        ['Yes']
       );
 
       let assignmentsCreated = 0;
@@ -498,8 +499,8 @@ class AdditionalFeeController {
       // Check if student exists
       console.log('🔍 Checking if student exists:', student_reg_number);
       const [student] = await conn.execute(
-        'SELECT RegNumber FROM students WHERE RegNumber = ? AND Active = "Yes"',
-        [student_reg_number]
+        'SELECT RegNumber FROM students WHERE RegNumber = ? AND Active = ?',
+        [student_reg_number, 'Yes']
       );
 
       if (student.length === 0) {
@@ -892,8 +893,8 @@ class AdditionalFeeController {
 
       // Get Cash/Bank account
       const [debitAccounts] = await conn.execute(
-        'SELECT id FROM chart_of_accounts WHERE code = ? AND type = "Asset" LIMIT 1',
-        [debitAccountCode]
+        'SELECT id FROM chart_of_accounts WHERE code = ? AND type = ? LIMIT 1',
+        [debitAccountCode, 'Asset']
       );
 
       if (debitAccounts.length === 0) {
@@ -904,13 +905,15 @@ class AdditionalFeeController {
 
       // Get Additional Fees Revenue account (or create fallback)
       const [revenueAccounts] = await conn.execute(
-        'SELECT id FROM chart_of_accounts WHERE code LIKE "4%" AND type = "Revenue" AND (name LIKE "%additional%" OR name LIKE "%fee%") LIMIT 1'
+        'SELECT id FROM chart_of_accounts WHERE code LIKE ? AND type = ? AND (name LIKE ? OR name LIKE ?) LIMIT 1',
+        ['4%', 'Revenue', '%additional%', '%fee%']
       );
 
       if (revenueAccounts.length === 0) {
         // Fallback to any revenue account
         const [fallbackRevenue] = await conn.execute(
-          'SELECT id FROM chart_of_accounts WHERE type = "Revenue" LIMIT 1'
+          'SELECT id FROM chart_of_accounts WHERE type = ? LIMIT 1',
+          ['Revenue']
         );
         
         if (fallbackRevenue.length === 0) {

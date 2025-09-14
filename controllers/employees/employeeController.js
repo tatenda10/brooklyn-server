@@ -285,7 +285,8 @@ class EmployeeController {
         let finalEmployeeId = employeeId;
         if (!finalEmployeeId) {
           const [maxId] = await connection.execute(
-            'SELECT MAX(CAST(SUBSTRING(employee_id, 4) AS UNSIGNED)) as max_num FROM employees WHERE employee_id LIKE "EMP%"'
+            'SELECT MAX(CAST(SUBSTRING(employee_id, 4) AS UNSIGNED)) as max_num FROM employees WHERE employee_id LIKE ?',
+            ['EMP%']
           );
           const nextNum = (maxId[0].max_num || 0) + 1;
           finalEmployeeId = `EMP${nextNum.toString().padStart(4, '0')}`;

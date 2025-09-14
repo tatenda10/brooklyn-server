@@ -417,9 +417,10 @@ class FeePaymentController {
 			const student_name = `${students[0].Name} ${students[0].Surname}`;
 
 			// Get Cash account (usually account 83 - Cash on Hand)
-			const [cashAccounts] = await conn.execute(
-				'SELECT id FROM chart_of_accounts WHERE code = "1000" AND type = "Asset" LIMIT 1'
-			);
+		const [cashAccounts] = await conn.execute(
+			'SELECT id FROM chart_of_accounts WHERE code = ? AND type = ? LIMIT 1',
+			['1000', 'Asset']
+		);
 
 			if (cashAccounts.length === 0) {
 				throw new Error('Cash account not found in chart of accounts');
@@ -427,15 +428,17 @@ class FeePaymentController {
 
 			const cashAccountId = cashAccounts[0].id;
 
-			// Get Tuition Fees Revenue account
-			const [revenueAccounts] = await conn.execute(
-				'SELECT id FROM chart_of_accounts WHERE code LIKE "4%" AND type = "Revenue" AND name LIKE "%tuition%" LIMIT 1'
-			);
+		// Get Tuition Fees Revenue account
+		const [revenueAccounts] = await conn.execute(
+			'SELECT id FROM chart_of_accounts WHERE code LIKE ? AND type = ? AND name LIKE ? LIMIT 1',
+			['4%', 'Revenue', '%tuition%']
+		);
 
 			if (revenueAccounts.length === 0) {
 				// Fallback to any revenue account
 				const [fallbackRevenue] = await conn.execute(
-					'SELECT id FROM chart_of_accounts WHERE type = "Revenue" LIMIT 1'
+					'SELECT id FROM chart_of_accounts WHERE type = ? LIMIT 1',
+					['Revenue']
 				);
 				
 				if (fallbackRevenue.length === 0) {
@@ -510,9 +513,10 @@ class FeePaymentController {
 			const student_name = `${students[0].Name} ${students[0].Surname}`;
 
 			// Get Cash account (usually account 83 - Cash on Hand)
-			const [cashAccounts] = await conn.execute(
-				'SELECT id FROM chart_of_accounts WHERE code = "1000" AND type = "Asset" LIMIT 1'
-			);
+		const [cashAccounts] = await conn.execute(
+			'SELECT id FROM chart_of_accounts WHERE code = ? AND type = ? LIMIT 1',
+			['1000', 'Asset']
+		);
 
 			if (cashAccounts.length === 0) {
 				throw new Error('Cash account not found in chart of accounts');
@@ -520,15 +524,17 @@ class FeePaymentController {
 
 			const cashAccountId = cashAccounts[0].id;
 
-			// Get Tuition Fees Revenue account
-			const [revenueAccounts] = await conn.execute(
-				'SELECT id FROM chart_of_accounts WHERE code LIKE "4%" AND type = "Revenue" AND name LIKE "%tuition%" LIMIT 1'
-			);
+		// Get Tuition Fees Revenue account
+		const [revenueAccounts] = await conn.execute(
+			'SELECT id FROM chart_of_accounts WHERE code LIKE ? AND type = ? AND name LIKE ? LIMIT 1',
+			['4%', 'Revenue', '%tuition%']
+		);
 
 			if (revenueAccounts.length === 0) {
 				// Fallback to any revenue account
 				const [fallbackRevenue] = await conn.execute(
-					'SELECT id FROM chart_of_accounts WHERE type = "Revenue" LIMIT 1'
+					'SELECT id FROM chart_of_accounts WHERE type = ? LIMIT 1',
+					['Revenue']
 				);
 				
 				if (fallbackRevenue.length === 0) {

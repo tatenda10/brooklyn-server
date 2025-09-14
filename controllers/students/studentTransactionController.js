@@ -379,7 +379,8 @@ class StudentTransactionController {
 
             // Get Cash account (usually account 83 - Cash on Hand)
             const [cashAccounts] = await conn.execute(
-                'SELECT id FROM chart_of_accounts WHERE code = "1000" AND type = "Asset" LIMIT 1'
+                'SELECT id FROM chart_of_accounts WHERE code = ? AND type = ? LIMIT 1',
+                ['1000', 'Asset']
             );
 
             if (cashAccounts.length === 0) {
@@ -396,20 +397,23 @@ class StudentTransactionController {
                 // Money coming in - could be various revenue sources
                 if (transactionData.description.toLowerCase().includes('tuition')) {
                     const [revenueAccounts] = await conn.execute(
-                        'SELECT id FROM chart_of_accounts WHERE code LIKE "4%" AND type = "Revenue" AND name LIKE "%tuition%" LIMIT 1'
+                        'SELECT id FROM chart_of_accounts WHERE code LIKE ? AND type = ? AND name LIKE ? LIMIT 1',
+                        ['4%', 'Revenue', '%tuition%']
                     );
                     otherAccountId = revenueAccounts[0]?.id;
                     otherAccountDescription = 'Tuition fees revenue';
                 } else if (transactionData.description.toLowerCase().includes('boarding')) {
                     const [revenueAccounts] = await conn.execute(
-                        'SELECT id FROM chart_of_accounts WHERE code LIKE "4%" AND type = "Revenue" AND name LIKE "%boarding%" LIMIT 1'
+                        'SELECT id FROM chart_of_accounts WHERE code LIKE ? AND type = ? AND name LIKE ? LIMIT 1',
+                        ['4%', 'Revenue', '%boarding%']
                     );
                     otherAccountId = revenueAccounts[0]?.id;
                     otherAccountDescription = 'Boarding fees revenue';
                 } else {
                     // Fallback to any revenue account
                     const [fallbackRevenue] = await conn.execute(
-                        'SELECT id FROM chart_of_accounts WHERE type = "Revenue" LIMIT 1'
+                        'SELECT id FROM chart_of_accounts WHERE type = ? LIMIT 1',
+                        ['Revenue']
                     );
                     otherAccountId = fallbackRevenue[0]?.id;
                     otherAccountDescription = 'General revenue';
@@ -418,14 +422,16 @@ class StudentTransactionController {
                 // DEBIT - money going out - could be various expense sources
                 if (transactionData.description.toLowerCase().includes('salary') || transactionData.description.toLowerCase().includes('staff')) {
                     const [expenseAccounts] = await conn.execute(
-                        'SELECT id FROM chart_of_accounts WHERE code LIKE "5%" AND type = "Expense" AND name LIKE "%salary%" LIMIT 1'
+                        'SELECT id FROM chart_of_accounts WHERE code LIKE ? AND type = ? AND name LIKE ? LIMIT 1',
+                        ['5%', 'Expense', '%salary%']
                     );
                     otherAccountId = expenseAccounts[0]?.id;
                     otherAccountDescription = 'Salary expense';
                 } else {
                     // Fallback to any expense account
                     const [fallbackExpense] = await conn.execute(
-                        'SELECT id FROM chart_of_accounts WHERE type = "Expense" LIMIT 1'
+                        'SELECT id FROM chart_of_accounts WHERE type = ? LIMIT 1',
+                        ['Expense']
                     );
                     otherAccountId = fallbackExpense[0]?.id;
                     otherAccountDescription = 'General expense';

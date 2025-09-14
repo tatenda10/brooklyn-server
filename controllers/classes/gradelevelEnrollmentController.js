@@ -148,8 +148,8 @@ class GradelevelEnrollmentController {
             // Check class capacity if specified
             if (gradelevelClasses[0].capacity) {
                 const [enrolledCount] = await pool.execute(
-                    'SELECT COUNT(*) as count FROM enrollments_gradelevel_classes WHERE gradelevel_class_id = ? AND status = "active"',
-                    [gradelevel_class_id]
+                    'SELECT COUNT(*) as count FROM enrollments_gradelevel_classes WHERE gradelevel_class_id = ? AND status = ?',
+                    [gradelevel_class_id, 'active']
                 );
                 
                 if (enrolledCount[0].count >= gradelevelClasses[0].capacity) {
